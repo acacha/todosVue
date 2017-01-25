@@ -4,15 +4,27 @@
             <md-button class="md-raised md-primary" @click="connect">Connect</md-button>
         </div>
         <div v-show="authorized">
-            <md-button class="md-raised md-primary" @click="logout">Logout</md-button>
+            <md-button class="md-raised md-primary" @click="initLogout">Logout</md-button>
         </div>
         <ul v-show="authorized">
             <li v-for="(todo, index) in todos">
                 {{ todo.name }}
             </li>
         </ul>
-    </div>
 
+        <md-snackbar md-position="bottom center" ref="connectionError" md-duration="4000">
+            <span>Connection error. Please reconnect using connect button!.</span>
+        </md-snackbar>
+
+        <md-dialog-confirm
+                md-title="Logout"
+                md-content="Are you sure you want to logout?"
+                md-ok-text="Ok"
+                md-cancel-text="Cancel"
+                @close="onCloseSureToLogout"
+                ref="sureToLogout">
+        </md-dialog-confirm>
+    </div>
 </template>
 <style>
 </style>
@@ -20,49 +32,64 @@
 var STORAGE_KEY = 'todosvue_token'
 var AUTH_CLIENT_ID = 5
 var AUTH_REDIRECT_URI = 'http://localhost:8095/todos'
+var API_URL = 'http://todos.dev:8080/api/v1/task'
+var OAUTH_SERVER_URL = 'http://todos.dev:8080/oauth/authorize?'
 
 export default{
   data () {
     return {
       todos: [],
-      authorized: false
+      authorized: false,
+      token: null
     }
   },
   created () {
-    var token = this.extractToken(document.location.hash)
+    if (document.location.hash) var token = this.extractToken(document.location.hash)
     if (token) this.saveToken(token)
-    if (this.fetchToken()) {
+    if (this.token == null) this.token = this.fetchToken()
+    if (this.token) {
       this.authorized = true
+      this.fetchData()
     } else {
       this.authorized = false
     }
-    this.fetchData()
   },
   methods: {
     fetchData: function () {
       return this.fetchPage(1)
     },
     fetchPage: function (page) {
-      var token = this.fetchToken()
-      console.log('TOKEN: ' + token)
-      if (token != null) {
-        this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
-        console.log('HEY TOKEN: ' + token)
-      }
-      this.$http.get('http://todos.dev:8080/api/v1/task?page=' + page).then((response) => {
-        console.log(response.data)
+      this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + this.token
+      // TODO: https://laracasts.com/discuss/channels/laravel/laravel-53-passport-cross-domain-error
+      // https://medium.com/@mshanak/solved-laravel-5-3-passport-with-cors-2c6667ef058b#.dbc3c9mcq
+
+      this.$http.get(API_URL + '?page=' + page).then((response) => {
         this.todos = response.data.data
       }, (response) => {
-        console.log(response.data)
+        console.log('ERROR DATA: ' + response.data)
+        this.showConnectionError()
+        this.authorized = false
       })
     },
     extractToken: function (hash) {
-      var match = hash.match(/access_token=(\w+)/)
-      return !!match && match[1]
+      return hash.match(/#(?:access_token)=([\S\s]*?)&/)[1]
+    },
+    showConnectionError () {
+      this.$refs.connectionError.open()
+    },
+    initLogout: function () {
+      this.openDialog('sureToLogout')
     },
     logout: function () {
       window.localStorage.removeItem(STORAGE_KEY)
       this.authorized = false
+    },
+    openDialog: function (ref) {
+      this.$refs[ref].open()
+    },
+    onCloseSureToLogout: function (type) {
+      console.log(typeof type)
+      if (type === 'ok') this.logout()
     },
     connect: function () {
       query = {
@@ -72,7 +99,7 @@ export default{
         scope: ''
       }
       var query = window.querystring.stringify(query)
-      window.location.replace('http://todos.dev:8080/oauth/authorize?' + query)
+      window.location.replace(OAUTH_SERVER_URL + query)
     },
     fetchToken: function () {
       return window.localStorage.getItem(STORAGE_KEY)
