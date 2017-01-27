@@ -35,6 +35,9 @@ export default {
   loggedIn () {
     return !!window.localStorage.getItem(todosVue.STORAGE_TOKEN_KEY)
   },
+  getAuthHeader () {
+    return 'Bearer ' + this.getToken()
+  },
   onChange () {}
 }
 

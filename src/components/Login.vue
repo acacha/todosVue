@@ -63,8 +63,10 @@ export default{
     if (this.token == null) this.token = auth.getToken()
     if (this.token) {
       this.authorized = true
+      this.$http.defaults.headers.common['Authorization'] = auth.getAuthHeader()
     } else {
       this.authorized = false
+      this.$http.defaults.headers.common['Authorization'] = ''
     }
   }
 }
