@@ -26,6 +26,10 @@
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
+            <md-icon>profile</md-icon> <router-link exact  to="/Profile" >Profile</router-link>
+          </md-list-item>
+
+          <md-list-item @click="toggleLeftSidenav">
             <md-avatar>
               <img src="https://placeimg.com/40/40/people/5" alt="People">
             </md-avatar>
