@@ -53,9 +53,7 @@
 <style>
 </style>
 <script>
-var API_URL = 'http://todos.dev:8080/api/v1/task'
-var STORAGE_KEY = 'todosvue_token'
-
+import todosVue from '../todosVue'
 export default{
   data () {
     return {
@@ -77,11 +75,7 @@ export default{
       return this.fetchPage(1)
     },
     fetchPage: function (page) {
-      this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem(STORAGE_KEY)
-      // TODO: https://laracasts.com/discuss/channels/laravel/laravel-53-passport-cross-domain-error
-      // https://medium.com/@mshanak/solved-laravel-5-3-passport-with-cors-2c6667ef058b#.dbc3c9mcq
-
-      this.$http.get(API_URL + '?page=' + page).then((response) => {
+      this.$http.get(todosVue.API_TASK_URL + '?page=' + page).then((response) => {
         this.connecting = false
         this.todos = response.data.data
         this.total = response.data.total

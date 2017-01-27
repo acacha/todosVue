@@ -46,9 +46,7 @@
 <style>
 </style>
 <script>
-var API_PROFILE_URL = 'http://todos.dev:8080/api/v1/user'
-var STORAGE_KEY = 'todosvue_token'
-
+import todosVue from '../todosVue'
 export default{
   data () {
     return {
@@ -63,19 +61,17 @@ export default{
   },
   computed: {
     avatarHash: function () {
+      // TODO : computed property hash is md5 from email
       return '046889f49471fd40d105eb76b9d83bf6'
     }
   },
   created () {
-    console.log('Component profile created')
     this.fetchUserProfile()
   },
   methods: {
     fetchUserProfile: function () {
-      this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + window.localStorage.getItem(STORAGE_KEY)
-      this.$http.get(API_PROFILE_URL).then((response) => {
+      this.$http.get(todosVue.API_PROFILE_URL).then((response) => {
         this.connecting = false
-        console.log(response.data)
         this.id = response.data.id
         this.name = response.data.name
         this.email = response.data.email

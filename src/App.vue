@@ -30,6 +30,10 @@
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
+            <md-icon>profile</md-icon> <router-link exact  to="/login" >Login/Logout</router-link>
+          </md-list-item>
+
+          <md-list-item @click="toggleLeftSidenav">
             <md-avatar>
               <img src="https://placeimg.com/40/40/people/5" alt="People">
             </md-avatar>
@@ -52,23 +56,22 @@
 </template>
 
 <script>
-import Hello from './components/Hello'
-
+import auth from './services/auth'
 export default {
   name: 'app',
-  components: {
-    Hello
-  },
   methods: {
     toggleLeftSidenav () {
       this.$refs.leftSidenav.toggle()
     },
     open (ref) {
-      console.log('Opened: ' + ref)
+      // console.log('Opened: ' + ref)
     },
     close (ref) {
-      console.log('Closed: ' + ref)
+      // console.log('Closed: ' + ref)
     }
+  },
+  created () {
+    this.$http.defaults.headers.common['Authorization'] = 'Bearer ' + auth.getToken()
   }
 }
 </script>
