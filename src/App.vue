@@ -8,7 +8,7 @@
         <h2 class="md-title">Todos</h2>
       </md-toolbar>
 
-      <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
+      <md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')" md-swipeable>
         <md-toolbar class="md-large">
           <div class="md-toolbar-container">
             <h3 class="md-title">Todos</h3>
