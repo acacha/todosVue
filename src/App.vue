@@ -30,6 +30,18 @@
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
+            <router-link exact  to="/Profile" >Device</router-link>
+          </md-list-item>
+
+          <md-list-item @click="toggleLeftSidenav">
+            <router-link exact  to="/Contacts" >Contactes</router-link>
+          </md-list-item>
+
+          <md-list-item @click="toggleLeftSidenav">
+            <router-link exact  to="/cordova" >Cordova</router-link>
+          </md-list-item>
+
+          <md-list-item @click="toggleLeftSidenav">
             <md-icon>profile</md-icon> <router-link exact  to="/login" >Login/Logout</router-link>
           </md-list-item>
 
@@ -58,7 +70,14 @@
 <script>
 export default {
   name: 'app',
+  created () {
+    console.log(window.location.href)
+    document.addEventListener('deviceready', this.onDeviceReady, false)
+  },
   methods: {
+    onDeviceReady () {
+      console.log('Working on platform: ' + window.device.platform)
+    },
     toggleLeftSidenav () {
       this.$refs.leftSidenav.toggle()
     },

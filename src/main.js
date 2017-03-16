@@ -5,8 +5,8 @@ import App from './App'
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.css'
-import 'roboto-fontface/css/roboto/roboto-fontface.css'
-import 'material-design-icons/iconfont/material-icons.css'
+// import 'roboto-fontface/css/roboto/roboto-fontface.css'
+// import 'material-design-icons/iconfont/material-icons.css'
 
 import VueRouter from 'vue-router'
 import Axios from 'axios'
@@ -31,6 +31,15 @@ import router from './services/router'
 
 Vue.use(VueMaterial)
 Vue.use(VueRouter)
+
+Vue.material.registerTheme('custom', {
+  primary: 'blue',
+  accent: 'red',
+  warn: 'red',
+  background: 'white'
+})
+
+Vue.material.setCurrentTheme('custom')
 
 /* eslint-disable no-new */
 new Vue({

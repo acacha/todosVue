@@ -41,7 +41,23 @@ export default{
         scope: ''
       }
       var query = window.querystring.stringify(query)
-      window.location.replace(todosVue.OAUTH_SERVER_URL + query)
+      if (window.cordova && window.device.platform !== 'browser') {
+        var oAuthWindow = window.cordova.InAppBrowser.open(todosVue.OAUTH_SERVER_URL + query, '_blank', 'location=yes')
+
+        var login = this
+        oAuthWindow.addEventListener('loadstart', function (e) {
+          var url = e.url
+          var hash = url.split('#')[1]
+          var accessToken = login.extractToken('#' + String(hash))
+          if (accessToken) {
+            auth.saveToken(accessToken)
+            login.authorized = true
+            oAuthWindow.close()
+          }
+        })
+      } else {
+        window.location.replace(todosVue.OAUTH_SERVER_URL + query)
+      }
     },
     initLogout: function () {
       this.openDialog('sureToLogout')
@@ -58,6 +74,7 @@ export default{
     }
   },
   created () {
+    console.log(window.cordova)
     if (document.location.hash) var token = this.extractToken(document.location.hash)
     if (token) auth.saveToken(token)
     if (this.token == null) this.token = auth.getToken()
