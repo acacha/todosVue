@@ -22,15 +22,17 @@
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
-            <md-icon>send</md-icon> <router-link exact  to="/tokens" >Tokens</router-link>
+            <md-icon>send</md-icon>
+            <router-link exact  to="/tokens" >Tokens</router-link>
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
-            <md-icon>profile</md-icon> <router-link exact  to="/Profile" >Profile</router-link>
+            <md-icon>profile</md-icon>
+            <router-link exact  to="/Profile" >Profile</router-link>
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
-            <router-link exact  to="/Profile" >Device</router-link>
+            <router-link exact  to="/device" >Device</router-link>
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
@@ -42,7 +44,13 @@
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
-            <md-icon>profile</md-icon> <router-link exact  to="/login" >Login/Logout</router-link>
+            <md-icon>profile</md-icon>
+            <router-link exact  to="/login" >Login/Logout</router-link>
+          </md-list-item>
+
+          <md-list-item @click="toggleLeftSidenav">
+            <md-icon>exit</md-icon>
+            <router-link exact  to="/exit" >Exit</router-link>
           </md-list-item>
 
           <md-list-item @click="toggleLeftSidenav">
@@ -68,6 +76,8 @@
 </template>
 
 <script>
+import notifications from './services/notifications'
+
 export default {
   name: 'app',
   created () {
@@ -77,6 +87,7 @@ export default {
   methods: {
     onDeviceReady () {
       console.log('Working on platform: ' + window.device.platform)
+      notifications.enable()
     },
     toggleLeftSidenav () {
       this.$refs.leftSidenav.toggle()
