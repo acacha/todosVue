@@ -4,17 +4,16 @@ import Profile from '../components/Profile'
 import NotFound from '../components/NotFound'
 import DeviceInfo from '../components/DeviceInfo'
 import Login from '../components/Login'
+import Notifications from '../components/Notifications'
 import Cordova from '../components/Cordova'
 import Exit from '../components/Exit'
 
 const routes = [
   { path: '',
-    component: Todos,
-    meta: { auth: true }
+    redirect: '/todos'
   },
   { path: '/',
-    component: Todos,
-    meta: { auth: true }
+    redirect: '/todos'
   },
   { path: '/todos',
     component: Todos,
@@ -38,6 +37,11 @@ const routes = [
   },
   { path: '/cordova',
     component: Cordova,
+    meta: { auth: false }
+  },
+  { path: '/notifications',
+    component: Notifications,
+    props: Notifications.get(),
     meta: { auth: false }
   },
   { path: '/exit',

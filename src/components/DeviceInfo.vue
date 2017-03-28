@@ -63,11 +63,17 @@
     methods: {
       onDeviceReady () {
         console.log('onDeviceReady')
-        console.log(window.cordova)
-        console.log(window.cordova.device)
         console.log(window.device)
-        this.cordova = window.cordova.device.cordova
-        this.model = window.cordova.device.model
+        console.log('Cordova: ' + window.device.cordova)
+        console.log('Model: ' + window.device.model)
+        console.log('Platform: ' + window.device.platform)
+        console.log('Uuid: ' + window.device.uuid)
+        console.log('Version: ' + window.device.version)
+        console.log('Manufacturer: ' + window.device.manufacturer)
+        console.log('IsVirtual: ' + window.device.isVirtual)
+        console.log('Serial: ' + window.device.serial)
+        this.cordova = window.device.cordova
+        this.model = window.device.model
         this.platform = window.device.platform
         this.uuid = window.device.uuid
         this.version = window.device.version

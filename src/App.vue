@@ -45,6 +45,11 @@
 
           <md-list-item @click="toggleLeftSidenav">
             <md-icon>profile</md-icon>
+            <router-link exact  to="/notifications" >Notifications</router-link>
+          </md-list-item>
+
+          <md-list-item @click="toggleLeftSidenav">
+            <md-icon>profile</md-icon>
             <router-link exact  to="/login" >Login/Logout</router-link>
           </md-list-item>
 
@@ -70,7 +75,12 @@
 
       </md-sidenav>
 
-        <router-view></router-view>
+    <transition name="bounce"
+                enter-active-class="animated bounceIn"
+                leave-active-class="animated bounceOut">
+      <router-view></router-view>
+    </transition>
+
 
   </div>
 </template>
